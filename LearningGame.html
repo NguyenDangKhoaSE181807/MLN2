@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Kinh Tế Chính Trị</title>
+    <style>
+        :root {
+            --primary: #075ac6;
+            --primary-2: #1d73e8;
+            --primary-soft: #e8f1ff;
+            --danger: #d0121b;
+            --danger-soft: #fff1f1;
+            --text: #111827;
+            --muted: #697386;
+            --line: #e5e9f2;
+            --line-blue: #bad5fb;
+            --surface: #ffffff;
+            --bg: #f7f8ff;
+            --shadow: 0 24px 70px rgba(15, 23, 42, 0.13);
+            --shadow-sm: 0 10px 28px rgba(15, 23, 42, 0.08);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 50% 28%, rgba(29, 115, 232, 0.08), transparent 34rem),
+                linear-gradient(180deg, #fbfcff 0%, var(--bg) 35%, #f7f8ff 100%);
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .app-shell {
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 58px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px;
+            background: rgba(255, 255, 255, 0.94);
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary);
+            font-weight: 800;
+            font-size: clamp(1.35rem, 2.3vw, 1.9rem);
+            letter-spacing: 0;
+            white-space: nowrap;
+        }
+
+        .brand svg,
+        .section-icon svg,
+        .question-icon svg,
+        .board-lock svg,
+        .chart-icon svg,
+        .auto-name svg {
+            width: 1em;
+            height: 1em;
+            display: block;
+        }
+
+        main {
+            width: min(100%, 1460px);
+            margin: 0 auto;
+            padding: 18px 32px 24px;
+        }
+
+        #setup-screen {
+            min-height: calc(100vh - 100px);
+            display: grid;
+            place-items: center;
+        }
+
+        .setup-card {
+            width: min(100%, 500px);
+            padding: 24px 32px 28px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #d8e7fb;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-icon {
+            width: 52px;
+            height: 52px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 16px;
+            border-radius: 16px;
+            color: var(--primary);
+            background: #d8e8ff;
+            font-size: 1.5rem;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+        }
+
+        .setup-card h1 {
+            max-width: 420px;
+            margin: 0 auto 10px;
+            font-size: clamp(1.55rem, 3vw, 2.05rem);
+            line-height: 1.18;
+            letter-spacing: 0;
+        }
+
+        .setup-card p {
+            width: min(100%, 410px);
+            margin: 0 auto;
+            color: #263244;
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        .setup-card strong {
+            color: var(--primary);
+        }
+
+        .team-form {
+            width: min(100%, 420px);
+            margin: 22px auto 0;
+        }
+
+        .team-list {
+            display: grid;
+            gap: 8px;
+            max-height: 244px;
+            padding-right: 4px;
+            overflow-y: auto;
+        }
+
+        .team-item {
+            display: grid;
+            grid-template-columns: 58px minmax(0, 1fr) 34px;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-index {
+            color: var(--primary);
+            font-size: 0.78rem;
+            font-weight: 900;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .input-box {
+            width: 100%;
+            height: 42px;
+            padding: 0 14px;
+            border: 2px solid var(--line);
+            border-radius: 10px;
+            outline: none;
+            color: var(--text);
+            background: white;
+            font-size: 0.94rem;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .team-remove {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border: 1px solid #f3b8b8;
+            border-radius: 10px;
+            color: var(--danger);
+            background: var(--danger-soft);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .team-remove:disabled {
+            cursor: not-allowed;
+            opacity: 0.35;
+        }
+
+        .input-box::placeholder {
+            color: #b5bbc6;
+        }
+
+        .input-box:focus {
+            border-color: var(--line-blue);
+            box-shadow: 0 0 0 5px rgba(7, 90, 198, 0.08);
+        }
+
+        .form-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 10px 6px 20px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .auto-name {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 0;
+            background: transparent;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .team-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 10px 4px 18px;
+        }
+
+        .team-action {
+            min-height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line-blue);
+            color: var(--primary);
+            background: #f4f8ff;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.82rem;
+        }
+
+        .team-action:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .btn-main {
+            width: 100%;
+            min-height: 52px;
+            border: 0;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(180deg, #1f73df, var(--primary));
+            box-shadow: 0 18px 32px rgba(7, 90, 198, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 42px rgba(7, 90, 198, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        #game-screen {
+            display: none;
+            grid-template-columns: minmax(620px, 1fr) minmax(360px, 420px);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .panel-left,
+        .panel-right {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .status-card,
+        .quiz-card,
+        .leaderboard,
+        .puzzle-card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .status-card {
+            min-height: 82px;
+            display: grid;
+            place-items: center;
+            padding: 12px 18px;
+            text-align: center;
+            border-color: var(--line-blue);
+        }
+
+        .status-card h2 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .moves-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 6px 14px;
+            color: var(--danger);
+            background: var(--danger-soft);
+            border: 1px solid #f3b8b8;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .quiz-card {
+            padding: 22px 24px;
+            min-height: 260px;
+        }
+
+        .question-row {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr);
+            align-items: center;
+            gap: 14px;
+        }
+
+        .question-icon {
+            width: 42px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            color: var(--primary);
+            background: #e1efff;
+            border-radius: 8px;
+            font-size: 1.15rem;
+        }
+
+        #question-text {
+            margin: 0;
+            color: #171d2d;
+            font-size: 0.92rem;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .option-btn {
+            min-height: 58px;
+            display: grid;
+            grid-template-columns: 34px minmax(0, 1fr);
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            color: #172033;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.86rem;
+            line-height: 1.35;
+            transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-1px);
+            border-color: var(--line-blue);
+            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.09);
+            background: #fbfdff;
+        }
+
+        .option-key {
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: var(--primary);
+            background: #e9f1ff;
+            font-weight: 900;
+        }
+
+        .leaderboard {
+            padding: 16px;
+        }
+
+        .board-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: #172033;
+            font-size: 0.88rem;
+            font-weight: 650;
+        }
+
+        .chart-icon {
+            color: #a12a0d;
+            font-size: 1.05rem;
+        }
+
+        #players-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .team-row {
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 9px 12px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: white;
+            color: #20283a;
+            transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+        }
+
+        .team-row.active {
+            border-color: var(--line-blue);
+            background: #f4f8ff;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .team-name {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .team-score {
+            white-space: nowrap;
+            font-weight: 800;
+            font-size: 0.86rem;
+        }
+
+        .board-lock {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 34px;
+            padding: 0 14px;
+            color: #303646;
+            background: #e8eefb;
+            border: 1px solid #ccd9ee;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+
+        .board-lock svg {
+            color: var(--danger);
+            font-size: 0.9rem;
+        }
+
+        .puzzle-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .number-toggle {
+            min-height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 14px;
+            border: 1px solid var(--line-blue);
+            border-radius: 999px;
+            color: var(--primary);
+            background: #f4f8ff;
+            cursor: pointer;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .number-toggle:hover {
+            background: #eaf3ff;
+        }
+
+        .puzzle-card {
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+        }
+
+        #puzzle-board {
+            width: 100%;
+            max-width: 340px;
+            margin: 0 auto;
+            aspect-ratio: 2 / 3;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 8px;
+            overflow: hidden;
+        }
+
+        .tile {
+            position: relative;
+            display: grid;
+            place-items: center;
+            border: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            color: white;
+            background-image:
+                linear-gradient(rgba(0, 10, 15, 0.44), rgba(0, 10, 15, 0.52)),
+                url("assets/political-economy-puzzle.png");
+            background-size: 300% 400%;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .tile:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .tile-number {
+            font-size: clamp(1.35rem, 2.5vw, 2rem);
+            font-weight: 900;
+            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.75);
+        }
+
+        .tile.empty {
+            background: #edf3ff !important;
+            border: 2px dashed #b7d4fc;
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .tile.empty:hover {
+            transform: none;
+            filter: none;
+        }
+
+        .message-card {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .message-card h3 {
+            margin: 0 0 10px;
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .message-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .message-action {
+            min-height: 40px;
+            margin-top: 16px;
+            padding: 0 18px;
+            border: 0;
+            border-radius: 10px;
+            color: white;
+            background: linear-gradient(180deg, #1f73df, var(--primary));
+            box-shadow: 0 10px 22px rgba(7, 90, 198, 0.18);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .toast-region {
+            position: fixed;
+            top: 82px;
+            right: 24px;
+            z-index: 30;
+            display: grid;
+            gap: 12px;
+            width: min(360px, calc(100vw - 32px));
+            pointer-events: none;
+        }
+
+        .toast {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) auto;
+            align-items: start;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid var(--line-blue);
+            border-left: 4px solid var(--primary);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+            backdrop-filter: blur(12px);
+            pointer-events: auto;
+            animation: toastIn 0.24s ease both;
+        }
+
+        .toast.success {
+            border-left-color: #0f8b62;
+        }
+
+        .toast.warning {
+            border-left-color: #c57900;
+        }
+
+        .toast.danger {
+            border-left-color: var(--danger);
+        }
+
+        .toast-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-weight: 900;
+        }
+
+        .toast.success .toast-icon {
+            color: #0f8b62;
+            background: #e7f7f0;
+        }
+
+        .toast.warning .toast-icon {
+            color: #a86400;
+            background: #fff5dd;
+        }
+
+        .toast.danger .toast-icon {
+            color: var(--danger);
+            background: var(--danger-soft);
+        }
+
+        .toast-title {
+            margin: 1px 0 4px;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        .toast-message {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.45;
+            font-size: 0.95rem;
+        }
+
+        .toast-close {
+            width: 28px;
+            height: 28px;
+            border: 0;
+            border-radius: 50%;
+            color: #667085;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .toast-close:hover {
+            background: #eef2f7;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            display: none;
+            place-items: center;
+            padding: 24px;
+            background: rgba(15, 23, 42, 0.36);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.show {
+            display: grid;
+            animation: fadeIn 0.18s ease both;
+        }
+
+        .game-modal {
+            width: min(440px, 100%);
+            padding: 28px;
+            max-height: calc(100vh - 48px);
+            overflow: auto;
+            border: 1px solid rgba(216, 231, 251, 0.92);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(29, 115, 232, 0.1), transparent 16rem),
+                rgba(255, 255, 255, 0.98);
+            box-shadow: 0 34px 90px rgba(15, 23, 42, 0.28);
+            text-align: center;
+            animation: modalIn 0.2s ease both;
+        }
+
+        .game-modal.reveal-modal {
+            width: min(520px, 100%);
+            padding: 18px 20px;
+            overflow: hidden;
+        }
+
+        .modal-icon {
+            width: 72px;
+            height: 72px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 18px;
+            border-radius: 22px;
+            color: var(--primary);
+            background: #d8e8ff;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .reveal-modal .modal-icon {
+            width: 46px;
+            height: 46px;
+            margin-bottom: 10px;
+            border-radius: 14px;
+            font-size: 1.35rem;
+        }
+
+        .modal-title {
+            margin: 0;
+            color: var(--text);
+            font-size: 1.55rem;
+            line-height: 1.25;
+        }
+
+        .reveal-modal .modal-title {
+            font-size: 1.25rem;
+        }
+
+        .modal-message {
+            margin: 12px 0 24px;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .reveal-modal .modal-message {
+            margin: 8px 0 12px;
+            font-size: 0.92rem;
+            line-height: 1.4;
+        }
+
+        .modal-image {
+            display: none;
+            width: 100%;
+            height: min(48vh, 430px);
+            margin: 12px 0 14px;
+            border-radius: 16px;
+            object-fit: contain;
+            background: #f5f7fb;
+            border: 1px solid var(--line);
+            box-shadow: 0 20px 44px rgba(15, 23, 42, 0.18);
+        }
+
+        .reveal-modal .modal-image {
+            display: block;
+        }
+
+        .modal-action {
+            min-width: 150px;
+            min-height: 42px;
+            border: 0;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(180deg, #1f73df, var(--primary));
+            box-shadow: 0 12px 24px rgba(7, 90, 198, 0.22);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-10px) translateX(12px); }
+            to { opacity: 1; transform: translateY(0) translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(14px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 1100px) {
+            .topbar {
+                min-height: 58px;
+                padding: 12px 20px;
+            }
+
+            .brand {
+                font-size: 1.35rem;
+            }
+
+            main {
+                padding: 16px 18px 24px;
+            }
+
+            #game-screen {
+                grid-template-columns: 1fr;
+            }
+
+            .puzzle-card {
+                width: min(100%, 420px);
+                align-self: center;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .topbar {
+                justify-content: flex-start;
+            }
+
+            .brand {
+                white-space: normal;
+                line-height: 1.15;
+            }
+
+            .setup-card {
+                padding: 34px 22px;
+                border-radius: 20px;
+            }
+
+            .team-form {
+                margin-top: 30px;
+            }
+
+            .form-meta {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .btn-main {
+                min-height: 70px;
+                letter-spacing: 0.08em;
+            }
+
+            .quiz-card {
+                padding: 26px 18px;
+            }
+
+            .question-row {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .question-icon {
+                margin: 0 auto;
+            }
+
+            .options-grid,
+            #players-list {
+                grid-template-columns: 1fr;
+            }
+
+            .option-btn {
+                min-height: 82px;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <span>Đấu Trường Kinh Tế Chính Trị</span>
+            </div>
+        </header>
+
+        <main>
+            <section id="setup-screen">
+                <div class="setup-card">
+                    <div class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-8 0v2"></path><circle cx="12" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path><path d="M2 21v-2a4 4 0 0 1 3-3.87"></path><path d="M8 3.13a4 4 0 0 0 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h1>Khởi Tạo Các Tập Đoàn Chiến Lược</h1>
+                    <p>Tạo danh sách đội chơi tham gia đấu trường. Có thể thêm hoặc bớt đội, tối đa <strong>10 đội</strong>.</p>
+
+                    <div class="team-form">
+                        <div class="team-list" id="team-list" aria-label="Danh sách đội chơi"></div>
+                        <div class="form-meta">
+                            <span>Tối thiểu 2 đội</span>
+                            <span id="team-count-text">0/10 đội</span>
+                        </div>
+                        <div class="team-actions">
+                            <button class="team-action" type="button" id="add-team-btn" onclick="addTeamInput()">+ Thêm đội</button>
+                            <button class="team-action" type="button" onclick="fillMaxTeams()">Tối đa</button>
+                        </div>
+                        <button class="btn-main" type="button" onclick="startGame()">Khởi chạy trò chơi</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="game-screen" aria-live="polite">
+                <div class="panel-left">
+                    <div class="status-card">
+                        <div>
+                            <h2 id="current-turn-text">Lượt của ...</h2>
+                            <div class="moves-badge" id="moves-left-text">Lượt di chuyển puzzle: 0</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-card" id="quiz-section">
+                        <div class="question-row">
+                            <div class="question-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle><path d="M9.1 9a3 3 0 1 1 4.8 2.4c-1 .7-1.9 1.3-1.9 2.6"></path><path d="M12 17h.01"></path>
+                                </svg>
+                            </div>
+                            <h3 id="question-text">Đang kết nối ngân hàng câu hỏi...</h3>
+                        </div>
+                        <div class="options-grid" id="options-container"></div>
+                    </div>
+
+                    <div class="leaderboard">
+                        <div class="board-heading">
+                            <span class="chart-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 3v18h18"></path><path d="M7 16v-5"></path><path d="M12 16V7"></path><path d="M17 16v-3"></path>
+                                </svg>
+                            </span>
+                            <span>Bảng Tổng Sắp Điểm Đóng Góp</span>
+                        </div>
+                        <div id="players-list"></div>
+                    </div>
+                </div>
+
+                <aside class="panel-right">
+                    <div class="puzzle-toolbar">
+                        <div class="board-lock" id="puzzle-status">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="16" height="11" x="4" y="11" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                            </svg>
+                            <span>Bức tranh bị khóa</span>
+                        </div>
+                        <button class="number-toggle" type="button" id="number-toggle-btn" onclick="toggleTileNumbers()">Hiện số</button>
+                    </div>
+                    <div class="puzzle-card">
+                        <div id="puzzle-board"></div>
+                    </div>
+                </aside>
+            </section>
+        </main>
+
+        <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+        <div class="modal-overlay" id="game-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="game-modal-title" aria-describedby="game-modal-message">
+            <div class="game-modal">
+                <div class="modal-icon" id="game-modal-icon" aria-hidden="true">!</div>
+                <h2 class="modal-title" id="game-modal-title">Thông báo</h2>
+                <p class="modal-message" id="game-modal-message">Nội dung thông báo</p>
+                <img class="modal-image" id="game-modal-image" alt="Bức tranh Kinh tế Chính trị đã hoàn thành">
+                <button class="modal-action" type="button" id="game-modal-action">Đã hiểu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionBank = [
+            {
+                q: "Thuộc tính nào của hàng hóa thể hiện công dụng của vật phẩm có thể thỏa mãn nhu cầu nào đó của con người?",
+                a: ["Giá trị", "Giá trị trao đổi", "Giá trị sử dụng", "Giá trị thặng dư"],
+                c: 2
+            },
+            {
+                q: "Lượng giá trị của hàng hóa được đo lường bằng thước đo nào?",
+                a: ["Thời gian lao động cá biệt", "Thời gian lao động xã hội cần thiết", "Chi phí nguyên vật liệu", "Hao mòn máy móc"],
+                c: 1
+            },
+            {
+                q: "Ai là người khẳng định: Tiền tệ là một loại hàng hóa đặc biệt đóng vai trò vật ngang giá chung?",
+                a: ["Karl Marx", "Adam Smith", "David Ricardo", "Lenin"],
+                c: 0
+            },
+            {
+                q: "Mục đích trực tiếp của nền sản xuất tư bản chủ nghĩa là gì?",
+                a: ["Mở rộng thị trường tiêu dùng", "Phát triển công nghệ máy móc", "Tạo việc làm cho người lao động", "Tạo ra nhiều giá trị thặng dư"],
+                c: 3
+            },
+            {
+                q: "Bộ phận tư bản biến thành tư liệu sản xuất và giá trị của nó không thay đổi về lượng trong quá trình sản xuất gọi là gì?",
+                a: ["Tư bản bất biến", "Tư bản khả biến", "Tư bản cố định", "Tư bản lưu động"],
+                c: 0
+            },
+            {
+                q: "Bản chất của tiền công trong chủ nghĩa tư bản là gì?",
+                a: ["Giá cả của lao động", "Giá trị của sức lao động", "Sự ban ơn của nhà tư bản", "Phần thưởng hiệu suất"],
+                c: 1
+            },
+            {
+                q: "Nguồn gốc duy nhất của tích lũy tư bản là gì?",
+                a: ["Tiền tiết kiệm của nhà tư bản", "Viện trợ từ nước ngoài", "Giá trị thặng dư đã được tư bản hóa", "Vay vốn từ ngân hàng"],
+                c: 2
+            },
+            {
+                q: "Khi cung bằng cầu thì giá cả hàng hóa sẽ như thế nào so với giá trị?",
+                a: ["Cao hơn giá trị", "Thấp hơn giá trị", "Bằng với giá trị", "Bằng không"],
+                c: 2
+            },
+            {
+                q: "Cơ chế thị trường điều tiết các nguồn lực sản xuất chủ yếu thông qua yếu tố nào?",
+                a: ["Mệnh lệnh của chính phủ", "Hệ thống giá cả và quy luật giá trị", "Ý muốn của người sản xuất", "Sự tự nguyện của người mua"],
+                c: 1
+            },
+            {
+                q: "Hình thức phân phối thu nhập cơ bản nhất trong nền kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam là gì?",
+                a: ["Phân phối theo phúc lợi xã hội", "Phân phối theo vốn góp", "Phân phối theo kết quả lao động và hiệu quả kinh tế", "Phân phối bình quân đầu người"],
+                c: 2
+            }
+        ];
+
+        const colorPalette = ["#075ac6", "#8a2be2", "#0f8b62", "#c57900", "#c026d3", "#0f766e", "#be123c", "#4f46e5", "#b45309", "#0369a1"];
+        const defaultNames = ["Đội 1", "Đội 2", "Đội 3", "Đội 4"];
+        const maxTeams = 10;
+        const maxTeamNames = Array.from({ length: maxTeams }, (_, idx) => `Đội ${idx + 1}`);
+        const puzzleImageUrl = "assets/political-economy-puzzle.png";
+        const optionKeys = ["A", "B", "C", "D"];
+        const noticeIconMap = {
+            info: "i",
+            success: "✓",
+            warning: "!",
+            danger: "!"
+        };
+
+        let teams = [];
+        let currentTeamIdx = 0;
+        let movesLeft = 0;
+        let usedQuestions = [];
+        let isGameOver = false;
+        let modalCallback = null;
+        let lastCompletedTeamName = "";
+        let showTileNumbers = false;
+
+        const boardCols = 3;
+        const boardRows = 4;
+        const emptyTileValue = boardCols * boardRows - 1;
+        const winningState = Array.from({ length: boardCols * boardRows }, (_, idx) => idx);
+        let boardState = [...winningState];
+
+        function showToast(title, message, variant = "info", duration = 3000) {
+            const region = document.getElementById("toast-region");
+            const toast = document.createElement("div");
+            toast.className = `toast ${variant}`;
+            toast.innerHTML = `
+                <div class="toast-icon" aria-hidden="true">${noticeIconMap[variant] || "i"}</div>
+                <div>
+                    <div class="toast-title"></div>
+                    <p class="toast-message"></p>
+                </div>
+                <button class="toast-close" type="button" aria-label="Đóng thông báo">×</button>
+            `;
+
+            toast.querySelector(".toast-title").textContent = title;
+            toast.querySelector(".toast-message").textContent = message;
+            toast.querySelector(".toast-close").addEventListener("click", () => toast.remove());
+            region.appendChild(toast);
+
+            window.setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(-8px) translateX(12px)";
+                toast.style.transition = "opacity 0.18s ease, transform 0.18s ease";
+                window.setTimeout(() => toast.remove(), 190);
+            }, duration);
+        }
+
+        function showModal({ title, message, variant = "info", actionText = "Đã hiểu", imageUrl = "", onClose = null }) {
+            const overlay = document.getElementById("game-modal-overlay");
+            const modal = overlay.querySelector(".game-modal");
+            const icon = document.getElementById("game-modal-icon");
+            const titleEl = document.getElementById("game-modal-title");
+            const messageEl = document.getElementById("game-modal-message");
+            const image = document.getElementById("game-modal-image");
+            const action = document.getElementById("game-modal-action");
+
+            modalCallback = onClose;
+            modal.classList.toggle("reveal-modal", Boolean(imageUrl));
+            icon.textContent = noticeIconMap[variant] || "i";
+            icon.style.color = variant === "danger" ? "var(--danger)" : variant === "warning" ? "#a86400" : variant === "success" ? "#0f8b62" : "var(--primary)";
+            icon.style.background = variant === "danger" ? "var(--danger-soft)" : variant === "warning" ? "#fff5dd" : variant === "success" ? "#e7f7f0" : "#d8e8ff";
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            image.src = imageUrl;
+            action.textContent = actionText;
+            overlay.classList.add("show");
+            action.focus();
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById("game-modal-overlay");
+            const callback = modalCallback;
+            modalCallback = null;
+            overlay.classList.remove("show");
+            if (typeof callback === "function") callback();
+        }
+
+        document.getElementById("game-modal-action").addEventListener("click", closeModal);
+        document.getElementById("game-modal-overlay").addEventListener("click", (event) => {
+            if (event.target.id === "game-modal-overlay") closeModal();
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && document.getElementById("game-modal-overlay").classList.contains("show")) {
+                closeModal();
+            }
+        });
+
+        function renderTeamInputs(names) {
+            const list = document.getElementById("team-list");
+            list.innerHTML = "";
+
+            names.forEach((name) => {
+                const item = document.createElement("div");
+                item.className = "team-item";
+                item.innerHTML = `
+                    <span class="team-index"></span>
+                    <input type="text" class="input-box team-name-input" value="" aria-label="Tên đội">
+                    <button class="team-remove" type="button" aria-label="Xóa đội">−</button>
+                `;
+
+                item.querySelector(".team-name-input").value = name;
+                item.querySelector(".team-remove").addEventListener("click", () => removeTeamInput(item));
+                list.appendChild(item);
+            });
+
+            refreshTeamControls();
+        }
+
+        function getTeamInputValues() {
+            return Array.from(document.querySelectorAll(".team-name-input")).map((input) => input.value.trim());
+        }
+
+        function refreshTeamControls() {
+            const items = Array.from(document.querySelectorAll(".team-item"));
+            items.forEach((item, idx) => {
+                item.querySelector(".team-index").textContent = `Đội ${idx + 1}`;
+                item.querySelector(".team-name-input").setAttribute("aria-label", `Tên đội ${idx + 1}`);
+                item.querySelector(".team-remove").disabled = items.length <= 2;
+            });
+
+            document.getElementById("team-count-text").textContent = `${items.length}/${maxTeams} đội`;
+            document.getElementById("add-team-btn").disabled = items.length >= maxTeams;
+        }
+
+        function addTeamInput(name = "") {
+            const values = getTeamInputValues();
+            if (values.length >= maxTeams) {
+                showToast("Đã đủ đội", `Tối đa ${maxTeams} đội chơi.`, "warning");
+                return;
+            }
+
+            values.push(name || `Đội ${values.length + 1}`);
+            renderTeamInputs(values);
+            document.querySelector(".team-item:last-child .team-name-input").focus();
+        }
+
+        function removeTeamInput(item) {
+            const values = getTeamInputValues();
+            if (values.length <= 2) {
+                showToast("Cần tối thiểu 2 đội", "Không thể bớt thêm đội chơi.", "warning");
+                return;
+            }
+
+            item.remove();
+            refreshTeamControls();
+        }
+
+        function fillDefaultTeams() {
+            renderTeamInputs(defaultNames);
+        }
+
+        function fillMaxTeams() {
+            renderTeamInputs(maxTeamNames);
+        }
+
+        function showCompletedImage() {
+            const teamName = lastCompletedTeamName || "Đội chơi";
+            showModal({
+                title: "Bức tranh đã hoàn thành",
+                message: `${teamName} đã hoàn thành bức tranh. Chúc mừng tất cả các đội, bức tranh về Kinh tế Chính trị đã được giải mã thành công.`,
+                variant: "success",
+                actionText: "Đóng",
+                imageUrl: puzzleImageUrl
+            });
+        }
+
+        function toggleTileNumbers() {
+            showTileNumbers = !showTileNumbers;
+            document.getElementById("number-toggle-btn").textContent = showTileNumbers ? "Ẩn số" : "Hiện số";
+            renderBoard();
+        }
+
+        function startGame() {
+            const parsedNames = getTeamInputValues().filter(Boolean).slice(0, maxTeams);
+
+            if (parsedNames.length < 2) {
+                showModal({
+                    title: "Thiếu đội chơi",
+                    message: "Vui lòng nhập ít nhất 2 đội chơi để khởi tạo đấu trường.",
+                    variant: "danger"
+                });
+                return;
+            }
+
+            teams = parsedNames.map((name, idx) => ({
+                name,
+                score: 0,
+                color: colorPalette[idx % colorPalette.length]
+            }));
+
+            currentTeamIdx = 0;
+            movesLeft = 0;
+            usedQuestions = [];
+            isGameOver = false;
+            showTileNumbers = false;
+            boardState = [...winningState];
+
+            document.getElementById("setup-screen").style.display = "none";
+            document.getElementById("game-screen").style.display = "grid";
+            document.getElementById("moves-left-text").style.display = "inline-flex";
+            document.getElementById("puzzle-status").innerHTML = lockStatusMarkup("Bức tranh bị khóa");
+            document.getElementById("number-toggle-btn").textContent = "Hiện số";
+
+            shufflePuzzle();
+            updateLeaderboard();
+            nextTurn();
+        }
+
+        function lockStatusMarkup(label) {
+            return `
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="16" height="11" x="4" y="11" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                </svg>
+                <span>${label}</span>
+            `;
+        }
+
+        function shufflePuzzle() {
+            let emptyIdx = emptyTileValue;
+            for (let i = 0; i < 36; i++) {
+                const validMoves = getValidMoves(emptyIdx);
+                const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+                boardState[emptyIdx] = boardState[randomMove];
+                boardState[randomMove] = emptyTileValue;
+                emptyIdx = randomMove;
+            }
+            renderBoard();
+        }
+
+        function getValidMoves(emptyIdx) {
+            const validMoves = [];
+            const row = Math.floor(emptyIdx / boardCols);
+            const col = emptyIdx % boardCols;
+
+            if (row > 0) validMoves.push(emptyIdx - boardCols);
+            if (row < boardRows - 1) validMoves.push(emptyIdx + boardCols);
+            if (col > 0) validMoves.push(emptyIdx - 1);
+            if (col < boardCols - 1) validMoves.push(emptyIdx + 1);
+
+            return validMoves;
+        }
+
+        function renderBoard() {
+            const board = document.getElementById("puzzle-board");
+            board.innerHTML = "";
+
+            boardState.forEach((tileValue, currentIndex) => {
+                const tile = document.createElement("button");
+                tile.type = "button";
+                tile.className = "tile";
+                tile.setAttribute("aria-label", tileValue === emptyTileValue ? "Ô trống" : `Mảnh ghép ${tileValue + 1}`);
+
+                if (isGameOver || tileValue !== emptyTileValue) {
+                    const origRow = Math.floor(tileValue / boardCols);
+                    const origCol = tileValue % boardCols;
+                    tile.style.backgroundImage = `linear-gradient(rgba(0, 10, 15, 0.44), rgba(0, 10, 15, 0.52)), url("${puzzleImageUrl}")`;
+                    tile.style.backgroundSize = `${boardCols * 100}% ${boardRows * 100}%`;
+                    tile.style.backgroundPosition = `${origCol * 50}% ${(origRow * 100) / (boardRows - 1)}%`;
+                }
+
+                if (!isGameOver && tileValue === emptyTileValue) {
+                    tile.classList.add("empty");
+                    tile.disabled = true;
+                } else if (!isGameOver) {
+                    tile.innerHTML = showTileNumbers ? `<span class="tile-number">${tileValue + 1}</span>` : "";
+                    tile.onclick = () => handleTileClick(currentIndex);
+                } else {
+                    tile.disabled = true;
+                }
+
+                board.appendChild(tile);
+            });
+
+        }
+
+        function handleTileClick(clickedIndex) {
+            if (isGameOver) return;
+            if (movesLeft <= 0) {
+                showToast("Chưa có lượt đi", "Hãy trả lời câu hỏi trắc nghiệm trước để nhận lượt di chuyển puzzle.", "warning");
+                return;
+            }
+
+            const emptyIndex = boardState.indexOf(emptyTileValue);
+            const cRow = Math.floor(clickedIndex / boardCols);
+            const cCol = clickedIndex % boardCols;
+            const eRow = Math.floor(emptyIndex / boardCols);
+            const eCol = emptyIndex % boardCols;
+
+            if (Math.abs(cRow - eRow) + Math.abs(cCol - eCol) === 1) {
+                boardState[emptyIndex] = boardState[clickedIndex];
+                boardState[clickedIndex] = emptyTileValue;
+                movesLeft--;
+                teams[currentTeamIdx].score++;
+
+                document.getElementById("moves-left-text").textContent = `Lượt di chuyển puzzle: ${movesLeft}`;
+                renderBoard();
+                updateLeaderboard();
+                checkWin();
+
+                if (!isGameOver && movesLeft === 0) {
+                    setTimeout(() => {
+                        showModal({
+                            title: "Hết lượt di chuyển",
+                            message: "Hệ thống sẽ chuyển quyền sang đội tiếp theo.",
+                            variant: "warning",
+                            actionText: "Chuyển lượt",
+                            onClose: switchPlayer
+                        });
+                    }, 200);
+                }
+            }
+        }
+
+        function loadQuestion() {
+            if (isGameOver) return;
+            if (usedQuestions.length === questionBank.length) usedQuestions = [];
+
+            let randomQ;
+            do {
+                randomQ = questionBank[Math.floor(Math.random() * questionBank.length)];
+            } while (usedQuestions.includes(randomQ));
+
+            usedQuestions.push(randomQ);
+
+            document.getElementById("question-text").textContent = randomQ.q;
+            const container = document.getElementById("options-container");
+            container.innerHTML = "";
+
+            randomQ.a.forEach((option, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.type = "button";
+                btn.innerHTML = `<span class="option-key">${optionKeys[idx]}</span><span>${option}</span>`;
+                btn.onclick = () => checkAnswer(idx, randomQ.c);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, correctIndex) {
+            if (isGameOver) return;
+            if (movesLeft > 0) {
+                showToast("Còn lượt puzzle", "Vui lòng sử dụng hết lượt di chuyển hiện tại trước khi trả lời tiếp.", "warning");
+                return;
+            }
+
+            if (selectedIndex === correctIndex) {
+                showToast("Chính xác", "Bạn giành được 3 lượt di chuyển mảnh ghép.", "success");
+                movesLeft = 3;
+                document.getElementById("moves-left-text").textContent = `Lượt di chuyển puzzle: ${movesLeft}`;
+            } else {
+                showModal({
+                    title: "Sai rồi",
+                    message: "Quyền ưu tiên được chuyển cho đội tiếp theo.",
+                    variant: "danger",
+                    actionText: "Chuyển lượt",
+                    onClose: switchPlayer
+                });
+            }
+        }
+
+        function switchPlayer() {
+            if (isGameOver) return;
+            currentTeamIdx = (currentTeamIdx + 1) % teams.length;
+            movesLeft = 0;
+            nextTurn();
+        }
+
+        function nextTurn() {
+            if (isGameOver) return;
+            const activeTeam = teams[currentTeamIdx];
+            const turnText = document.getElementById("current-turn-text");
+
+            turnText.textContent = `Lượt của ${activeTeam.name}`;
+            turnText.style.color = "var(--primary)";
+
+            document.getElementById("moves-left-text").textContent = `Lượt di chuyển puzzle: ${movesLeft}`;
+            updateLeaderboard();
+            loadQuestion();
+        }
+
+        function updateLeaderboard() {
+            const list = document.getElementById("players-list");
+            list.innerHTML = "";
+
+            teams.forEach((team, idx) => {
+                const row = document.createElement("div");
+                row.className = `team-row${!isGameOver && idx === currentTeamIdx ? " active" : ""}`;
+
+                row.innerHTML = `
+                    <span class="team-name">${team.name}</span>
+                    <span class="team-score">${team.score} điểm</span>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function checkWin() {
+            const isWin = boardState.every((val, idx) => val === winningState[idx]);
+            if (!isWin) return;
+
+            isGameOver = true;
+            movesLeft = 0;
+            const completedTeamName = teams[currentTeamIdx]?.name || "Đội chơi";
+            lastCompletedTeamName = completedTeamName;
+
+            document.getElementById("puzzle-status").innerHTML = lockStatusMarkup("Bức tranh đã hoàn thành");
+            document.getElementById("quiz-section").innerHTML = `
+                <div class="message-card">
+                    <h3>Trận đấu kết thúc</h3>
+                    <p>${completedTeamName} đã hoàn thành bức tranh.</p>
+                    <button class="message-action" type="button" onclick="showCompletedImage()">Hiện bức tranh</button>
+                </div>
+            `;
+
+            document.getElementById("current-turn-text").textContent = "Hội nghị hoàn thành viên mãn";
+            document.getElementById("current-turn-text").style.color = "var(--primary)";
+            document.getElementById("moves-left-text").style.display = "none";
+
+            renderBoard();
+            updateLeaderboard();
+
+            setTimeout(() => {
+                showModal({
+                    title: "Bức tranh đã hoàn thành",
+                    message: `${completedTeamName} đã hoàn thành bức tranh. Chúc mừng tất cả các đội, bức tranh về Kinh tế Chính trị đã được giải mã thành công.`,
+                    variant: "success",
+                    actionText: "Tổng kết",
+                    imageUrl: puzzleImageUrl
+                });
+            }, 350);
+        }
+
+        renderTeamInputs(defaultNames);
+    </script>
+</body>
+</html>
